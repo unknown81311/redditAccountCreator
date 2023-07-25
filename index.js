@@ -1,9 +1,12 @@
 const puppeteer = require('puppeteer');
 const { app, BrowserWindow, ipcMain } = require('electron');
+const fs = require("fs");
 
 auth = require("./auth.json")
 console.log(auth.simplelogin);
 let mainWindow;
+
+let __USER__ = {};
 
 app.on('ready', async () => {
   mainWindow = new BrowserWindow({
@@ -38,7 +41,8 @@ app.on('ready', async () => {
   await page.goto("https://www.reddit.com/account/register");
 
   ipcMain.on('submit', async (event) => {
-    page.evaluate(()=>document.querySelector("div.Step__content > form").submit())
+    page.evaluate(()=>document.querySelector("div.Step__content > form").submit());
+    fs.appendFileSync("accounts.txt", JSON.stringify(__USER__)+"\n");
   });
 
   ipcMain.on('clickedCoordinates', (event, coordinates) => {
@@ -102,6 +106,12 @@ async function getVideoStream(page, webContents) {
 
   await page.keyboard.type(password);
   page.keyboard.press('Enter');
+
+  __USER__ = {
+    email:emailAddr,
+    username: userName,
+    password: password
+  }
 
   await tabToElmTAG(page, "IFRAME");
   //page.click("iframe", {x:Math.random()*50,y:Math.random()*50});
