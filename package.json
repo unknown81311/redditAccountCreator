@@ -11,6 +11,5 @@
   "dependencies": {
     "electron": "^25.3.1",
     "puppeteer": "^20.9.0",
-    "puppeteer-stream": "^3.0.5"
   }
 }
