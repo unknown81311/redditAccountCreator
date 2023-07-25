@@ -1,6 +1,8 @@
 const puppeteer = require('puppeteer');
 const { app, BrowserWindow, ipcMain } = require('electron');
 
+auth = require("./auth.json")
+console.log(auth.simplelogin);
 let mainWindow;
 
 app.on('ready', async () => {
@@ -73,7 +75,7 @@ async function getVideoStream(page, webContents) {
   await fetch("https://app.simplelogin.io/api/alias/random/new?hostname=", {
     "headers": {
       "accept": "application/json, text/plain, */*",
-      "authentication": "",
+      "authentication": auth.simplelogin,
       "content-type": "application/json",
     },
     "body": "{\"note\":\"REDDIT BOT\"}",
