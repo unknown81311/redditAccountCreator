@@ -1,0 +1,16 @@
+{
+  "name": "electronpuppeteer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^25.3.1",
+    "puppeteer": "^20.9.0",
+    "puppeteer-stream": "^3.0.5"
+  }
+}

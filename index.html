@@ -1,0 +1,53 @@
+<!-- index.html (Electron renderer process) -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Reddit Account Creator</title>
+</head>
+<body style="font-family: sans-serif;">
+  <h1 id="title">please wait while we setup the account</h1>
+  <img id="realTimeImage" width="400" src="">
+  <br>
+  <p>only press when you are done:</p>
+  <br>
+  <buton onclick="submit()" style="
+      padding: 5px 10px;
+      border: 1px solid;
+      border-radius: 6px;
+      background: #1a73e8;
+      color: white;
+      font-weight: 700;
+      font-size: xx-large;
+  ">submit</buton>
+  <script>
+    const { ipcRenderer } = require('electron');
+    const imageElement = document.getElementById('realTimeImage');
+    let title = true;
+    ipcRenderer.on('updateImage', (event, imagePath) => {
+      if(title){
+        document.body.removeChild(document.getElementById('title'));
+        title = false;
+      }
+      imageElement.src = `./captcha.png?timestamp=${Date.now()}`;
+    });
+
+    imageElement.addEventListener('click', (event) => {
+      const mouseX = event.clientX;
+      const mouseY = event.clientY;
+
+      ipcRenderer.send('clickedCoordinates', { x: mouseX, y: mouseY });
+    });
+
+    ipcRenderer.on('mainProcessError', (event, errorMessage) => {
+      // Handle the error in the renderer process
+      alert('Main process error: ' + errorMessage);
+      // You can display the error message on the page, log it to the console, or perform any other action you need.
+    });
+
+    function submit(){
+      ipcRenderer.send('submit');
+    }
+  </script>
+</body>
+</html>
